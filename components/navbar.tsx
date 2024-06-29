@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       <motion.nav
-        className={`flex justify-between items-center fixed left-0 right-0 mx-auto bottom-16 w-80 shadow-sm border px-4 py-1 rounded-full ${theme === 'light' ? 'bg-[#2e071c] text-white' : 'bg-white text-[#2e071c] border-2 border-[#2e071c]'}`}
+        className={`flex justify-between items-center fixed left-0 right-0 mx-auto bottom-16 w-full shadow-sm px-4 py-1 rounded-full ${theme === 'light' ? 'bg-[#2e071c] text-white' : 'bg-white text-[#2e071c]'} md:w-[570px]`}
         role='navigation'
         initial={{ y: 50 }}
         animate={{ y: 0 }}
@@ -61,6 +61,7 @@ const Navbar: React.FC = () => {
               transition={{ color: { duration: 0.1 } }}
             >
               {iconForSection(id)}
+              {activeSection === id && <span className={`ml-2 hidden sm:block`}>{nameForSection(id)}</span>}
             </motion.li>
           ))}
         </ul>
@@ -70,7 +71,7 @@ const Navbar: React.FC = () => {
         className={`fixed top-8 right-12 py-2 px-4 rounded-full ${theme === 'light' ? 'bg-[#2e071c]' : 'bg-white'}`}
         aria-label="Toggle Theme"
       >
-        {theme === 'light' ? <div className='text-white flex justify-center items-center gap-4'><span>Dark</span><FiMoon /></div> : <div className='text-[#2e071c] flex justify-center items-center gap-4'><span>Light</span><FiSun /></div>}
+        {theme === 'light' ? <div className='text-white flex justify-center items-center gap-4'><span className='font-semibold'>Dark</span><FiMoon /></div> : <div className='text-[#2e071c] flex justify-center items-center gap-4'><span className='font-semibold'>Light</span><FiSun /></div>}
       </button>
     </>
   );
@@ -90,6 +91,23 @@ const iconForSection = (section: string) => {
       return <IoMdContacts size={22} />;
     default:
       return null;
+  }
+};
+
+const nameForSection = (section: string) => {
+  switch (section) {
+    case 'hero':
+      return <span className='text-sm font-semibold'>Home</span>;
+    case 'about':
+      return <span className='text-sm font-semibold'>About</span>;
+    case 'services':
+      return <span className='text-sm font-semibold'>Services</span>;
+    case 'portfolio':
+      return <span className='text-sm font-semibold'>Portfolio</span>;
+    case 'contact':
+      return <span className='text-sm font-semibold'>Contact</span>;
+    default:
+      return '';
   }
 };
 

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AiFillHome } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
 import { MdOutlineMiscellaneousServices } from "react-icons/md";
@@ -13,28 +13,52 @@ const sections = ['hero', 'about', 'services', 'portfolio', 'contact'];
 
 const Navbar: React.FC = () => {
   const { activeSection, setActiveSection, theme, toggleTheme } = useAppContext();
-
-  const handleNavClick = (section: string) => {
-    document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => setActiveSection(section), 100);
-  };
-
-  const handleScroll = (event: WheelEvent) => {
-    const currentIndex = sections.indexOf(activeSection);
-    if (event.deltaY > 0 && currentIndex < sections.length - 1) {
-      handleNavClick(sections[currentIndex + 1]);
-    } else if (event.deltaY < 0 && currentIndex > 0) {
-      handleNavClick(sections[currentIndex - 1]);
-    }
-  };
+  const sectionRefs = useRef<{ [key: string]: IntersectionObserverEntry | null }>({});
+  const [observerActive, setObserverActive] = useState(true);
 
   useEffect(() => {
-    window.addEventListener('wheel', handleScroll);
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      if (!observerActive) return;
+
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5 // Adjust the threshold value as needed
+    });
+
+    sections.forEach(sectionId => {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        observer.observe(section);
+        sectionRefs.current[sectionId] = null;
+      }
+    });
 
     return () => {
-      window.removeEventListener('wheel', handleScroll);
+      sections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+          observer.unobserve(section);
+        }
+      });
     };
-  }, [activeSection]);
+  }, [observerActive, setActiveSection]);
+
+  const handleNavClick = (section: string) => {
+    setObserverActive(false);
+    document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
+    setActiveSection(section);
+    setTimeout(() => {
+      setObserverActive(true);
+    }, 1000); // Adjust the timeout duration as needed
+  };
 
   return (
     <>
@@ -55,13 +79,13 @@ const Navbar: React.FC = () => {
           {sections.map((id) => (
             <motion.li
               key={id}
-              className={`flex justify-center items-center cursor-pointer w-1/5 p-2 z-10`}
+              className='flex justify-center items-center cursor-pointer w-1/5 p-2 z-10'
               onClick={() => handleNavClick(id)}
               animate={{ color: activeSection === id ? (theme === 'light' ? '#2e071c' : 'white') : theme === 'light' ? '#ffffff' : '#2e071c' }}
               transition={{ color: { duration: 0.1 } }}
             >
               {iconForSection(id)}
-              {activeSection === id && <span className={`ml-2 hidden sm:block`}>{nameForSection(id)}</span>}
+              {activeSection === id && <span className='ml-2 hidden sm:block'>{nameForSection(id)}</span>}
             </motion.li>
           ))}
         </ul>

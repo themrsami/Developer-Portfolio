@@ -1,8 +1,17 @@
+'use client';
 import React from 'react'
+import { useAppContext } from '@/context/AppContext';
 
 const Contact = () => {
+  const { theme } = useAppContext();
+  const backgroundImage = theme === 'dark' ? "url('./bgdark.jpg')" : "url('./bglight.jpg')";
   return (
-    <div>Contact</div>
+    <div className='flex flex-col justify-center items-center mx-auto h-screen' style={{ 
+      backgroundImage, 
+      transition: 'background-image 0.5s ease-in-out' 
+    }}>
+      Contact
+    </div>
   )
 }
 

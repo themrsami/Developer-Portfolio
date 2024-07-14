@@ -1,6 +1,7 @@
 'use client'
 import React from 'react';
 import Hero from '@/components/hero';
+import HeroTwo from '@/components/herotwo';
 import About from '@/components/about';
 import Portfolio from '@/components/portfolio';
 import Services from '@/components/services';
@@ -12,7 +13,7 @@ const Home: React.FC = () => {
   const { theme } = useAppContext();
 
   return (
-    <main className={`h-[500vh] ${theme === 'light' ? 'bg-custom-gradient-light' : 'bg-custom-gradient-dark'}`}>
+    <main className={`h-[500vh]`}>
       <Navbar />
       <div id="hero" style={{ height: '100vh' }}>
         <Hero />

@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import React, { PropsWithChildren, useRef } from "react";
+import Link from 'next/link';
 
 export interface DockProps extends VariantProps<typeof dockVariants> {
   className?: string;
@@ -15,7 +16,7 @@ const DEFAULT_MAGNIFICATION = 60;
 const DEFAULT_DISTANCE = 140;
 
 const dockVariants = cva(
-  "mx-auto w-max mt-8 h-[58px] p-2 flex items-end gap-2 rounded-2xl border dark:border-[#707070]",
+  "mx-auto w-max mt-8 h-[58px] p-2 flex items-end gap-2 rounded-2xl",
 );
 
 const Dock = React.forwardRef<HTMLDivElement, DockProps>(
@@ -64,6 +65,7 @@ export interface DockIconProps {
   mouseX?: any;
   className?: string;
   children?: React.ReactNode;
+  link?: string; // Add link prop here
   props?: PropsWithChildren;
 }
 
@@ -74,6 +76,7 @@ const DockIcon = ({
   mouseX,
   className,
   children,
+  link, // Add link prop here
   ...props
 }: DockIconProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -96,6 +99,12 @@ const DockIcon = ({
     damping: 12,
   });
 
+  const handleClick = () => {
+    if (link) {
+      window.open(link, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <motion.div
       ref={ref}
@@ -104,6 +113,7 @@ const DockIcon = ({
         "flex aspect-square cursor-pointer items-center justify-center rounded-full bg-neutral-400/40",
         className,
       )}
+      onClick={handleClick}
       {...props}
     >
       {children}

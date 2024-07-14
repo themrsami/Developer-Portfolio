@@ -23,15 +23,45 @@ export default function WordRotate({
   className,
 }: WordRotateProps) {
   const [index, setIndex] = useState(0);
+  let interval: NodeJS.Timeout | null = null;
+
+  const updateIndex = () => {
+    setIndex((prevIndex) => (prevIndex + 1) % words.length);
+  };
+
+  const startInterval = () => {
+    if (!interval) {
+      interval = setInterval(updateIndex, duration);
+    }
+  };
+
+  const stopInterval = () => {
+    if (interval) {
+      clearInterval(interval);
+      interval = null;
+    }
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % words.length);
-    }, duration);
+    startInterval();
 
-    // Clean up interval on unmount
-    return () => clearInterval(interval);
-  }, [words, duration]);
+    const onFocus = () => {
+      startInterval();
+    };
+
+    const onBlur = () => {
+      stopInterval();
+    };
+
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("blur", onBlur);
+
+    return () => {
+      stopInterval();
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("blur", onBlur);
+    };
+  }, [duration, words.length]);
 
   return (
     <div className="overflow-hidden py-2">

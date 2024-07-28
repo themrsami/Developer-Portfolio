@@ -66,7 +66,7 @@ const Hero = () => {
       <BorderBeam>
         <WordRotate
           className={`text-md sm:text-xl md:text-2xl text-center font-bold ${rotatetext} m-1 px-6 w-60 sm:w-80`}
-          words={["Web Developer", "Mobile App Developer", "Database Management", "Desktop Applications", "API Integration", "Graphic Designer", "Video Editor", "UI/UX Designer", "Social Media Manager",  ]}
+          words={["Web Developer", "Mobile App Developer", "Graphic Designer", "Video Editor", "UI/UX Designer", "Social Media Manager",  ]}
         />
       </BorderBeam>
       <IconCloud iconSlugs={slugs} />

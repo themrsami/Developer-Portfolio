@@ -22,15 +22,9 @@ const slugs = [
   "css3",
   "nodedotjs",
   "express",
-  "nextdotjs",
-  "prisma",
-  "firebase",
-  "vercel",
   "git",
   "github",
-  "gitlab",
   "visualstudiocode",
-  "androidstudio",
   "figma",
 ];
 
